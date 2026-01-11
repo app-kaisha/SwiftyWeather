@@ -32,6 +32,27 @@ struct WeatherView: View {
                     Text("Wind \(weatherVM.windSpeed)mph - Feels Like \(weatherVM.feelsLike)°C")
                         .font(.title2)
                         .padding(.bottom)
+                    
+                    List {
+                        ForEach(0..<weatherVM.date.count, id:\.self) { index in
+                            HStack(alignment: .top) {
+                                Image(systemName: getWeatherIcon(for: weatherVM.dailyWeatherCode[index]))
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 20, height: 20)
+                                Text(weatherVM.date[index])
+                                
+                                Spacer()
+                                Text("\(Int(weatherVM.dailyLowTemp[index]))°C /")
+                                Text("\(Int(weatherVM.dailyHighTemp[index]))°C")
+                                    .font(.title).bold()
+                                
+                            }
+                            .foregroundStyle(.black)
+                        }
+                        
+                    }
+                    .listStyle(.plain)
                 }
                 .foregroundStyle(.white)
                 .toolbar {

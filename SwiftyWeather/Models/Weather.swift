@@ -16,6 +16,8 @@ struct Weather: Codable {
     var timezone_abbreviation: String
     var current_units: CurrentUnits
     var current: Current
+    var daily_units: DailyUnits
+    var daily: Daily
     
     enum CodingKeys: CodingKey {
         case latitude
@@ -24,6 +26,8 @@ struct Weather: Codable {
         case timezone_abbreviation
         case current_units
         case current
+        case daily_units
+        case daily
     }
 }
 
@@ -47,4 +51,22 @@ struct Current: Codable {
     var wind_speed_10m: Double
     var relative_humidity_2m: Int
     var apparent_temperature: Double
+}
+
+struct DailyUnits: Codable {
+    var time: String
+    var weather_code: String
+    var sunrise: String
+    var sunset: String
+    var temperature_2m_max: String
+    var temperature_2m_min: String
+}
+
+struct Daily: Codable {
+    var time: [String]
+    var weather_code: [Int]
+    var sunrise: [String]
+    var sunset: [String]
+    var temperature_2m_max: [Double]
+    var temperature_2m_min: [Double]
 }

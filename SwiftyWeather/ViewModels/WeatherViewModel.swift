@@ -12,15 +12,21 @@ import Foundation
 @Observable
 class WeatherViewModel {
     
-    var urlString = "https://api.open-meteo.com/v1/forecast?latitude=52.05466078996747&longitude=-0.691645319980933&current=precipitation,temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=Europe%2FLondon&wind_speed_unit=mph"
+    var urlString = "https://api.open-meteo.com/v1/forecast?latitude=52.05466078996747&longitude=-0.691645319980933&daily=weather_code,sunrise,sunset,temperature_2m_max,temperature_2m_min&current=precipitation,temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=Europe%2FLondon&wind_speed_unit=mph"
+    
+//    var urlString = "https://api.open-meteo.com/v1/forecast?latitude=52.05466078996747&longitude=-0.691645319980933&current=precipitation,temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=Europe%2FLondon&wind_speed_unit=mph"
     
     var temperature: Int = 0
     var feelsLike: Int = 0
     var windSpeed: Int = 0
     var weatherCode: Int = 0
     
-    var isLoading = false
+    var date: [String] = []
+    var dailyWeatherCode: [Int] = []
+    var dailyHighTemp: [Double] = []
+    var dailyLowTemp: [Double] = []
     
+    var isLoading = false
     
     func getData() async {
         
@@ -50,11 +56,18 @@ class WeatherViewModel {
             
             // Confirm data was decoded:
             print("😎 JSON returned! Timezone: \(returned.timezone_abbreviation)")
+            print("😎 JSON returned! Daily Readings:: \(returned.daily.time)")
             Task { @MainActor in
                 self.temperature = Int(returned.current.temperature_2m)
                 self.feelsLike = Int(returned.current.apparent_temperature)
                 self.windSpeed = Int(returned.current.wind_speed_10m)
                 self.weatherCode = returned.current.weather_code
+                // Arrays of data
+                self.date = returned.daily.time
+                self.dailyWeatherCode = returned.daily.weather_code
+                self.dailyLowTemp = returned.daily.temperature_2m_min
+                self.dailyHighTemp = returned.daily.temperature_2m_max
+                
                 isLoading = false
             }
         } catch {
