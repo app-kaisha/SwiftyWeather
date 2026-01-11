@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  WeatherView.swift
 //  SwiftyWeather
 //
 //  Created by app-kaihatsusha on 11/01/2026.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct WeatherView: View {
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -21,5 +21,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    WeatherView()
 }

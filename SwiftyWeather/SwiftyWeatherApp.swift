@@ -12,7 +12,11 @@ import SwiftUI
 struct SwiftyWeatherApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            WeatherView()
+                .onAppear {
+                    Thread.sleep(forTimeInterval: 3)
+                }
         }
+        
     }
 }
