@@ -10,6 +10,37 @@ import Foundation
 
 extension WeatherView {
     
+    func getWeekDayFromDateString(dateString: String) -> String {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let date = dateFormatter.date(from: dateString) ?? .now
+        // increase date by value days
+        //let date = Calendar.current.date(byAdding: .day, value: value, to: Date.now)!
+        // Find dayNumber 1=Sunday, 7=Saturday
+        let dayNumber = Calendar.current.component(.weekday, from: date)
+        
+        // convert dayNumber to the weekday and retern resulting string
+        let weekday = Calendar.current.weekdaySymbols[dayNumber - 1] // Array is 0 indexed
+        //print("dayNumber: \(dayNumber) weekDay: \(weekday)")
+        
+        return weekday
+    }
+    
+    func getWeekDay(value: Int) -> String {
+        
+        // increase date by value days
+        let date = Calendar.current.date(byAdding: .day, value: value, to: Date.now)!
+        // Find dayNumber 1=Sunday, 7=Saturday
+        let dayNumber = Calendar.current.component(.weekday, from: date)
+        
+        // convert dayNumber to the weekday and retern resulting string
+        let weekday = Calendar.current.weekdaySymbols[value - 1] // Array is 0 indexed
+        print("dayNumber: \(dayNumber) weekDay: \(weekday)")
+        
+        return weekday
+    }
+    
     func getWeatherDescription(for code: Int) -> String {
         switch code {
         case 0:

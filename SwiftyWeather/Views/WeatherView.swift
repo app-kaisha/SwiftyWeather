@@ -40,19 +40,26 @@ struct WeatherView: View {
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 20, height: 20)
-                                Text(weatherVM.date[index])
+                                //Text(weatherVM.date[index])
+                                //Text(getWeekDay(value: index+1))
+                                Text(getWeekDayFromDateString(dateString: weatherVM.date[index]))
                                 
                                 Spacer()
                                 Text("\(Int(weatherVM.dailyLowTemp[index]))°C /")
                                 Text("\(Int(weatherVM.dailyHighTemp[index]))°C")
                                     .font(.title).bold()
                                 
+                                let _ = print(weatherVM.date.first ?? "")
+                                
                             }
-                            .foregroundStyle(.black)
                         }
+                        .font(.title2)
+                        .foregroundStyle(.white)
+                        .listRowBackground(Color.clear)
                         
                     }
                     .listStyle(.plain)
+                    
                 }
                 .foregroundStyle(.white)
                 .toolbar {
