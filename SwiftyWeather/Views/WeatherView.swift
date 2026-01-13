@@ -49,8 +49,6 @@ struct WeatherView: View {
                                 Text("\(Int(weatherVM.dailyHighTemp[index]))°C")
                                     .font(.title).bold()
                                 
-                                let _ = print(weatherVM.date.first ?? "")
-                                
                             }
                         }
                         .font(.title2)

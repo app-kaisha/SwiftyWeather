@@ -55,8 +55,8 @@ class WeatherViewModel {
             }
             
             // Confirm data was decoded:
-            print("😎 JSON returned! Timezone: \(returned.timezone_abbreviation)")
-            print("😎 JSON returned! Daily Readings:: \(returned.daily.time)")
+            //print("😎 JSON returned! Timezone: \(returned.timezone_abbreviation)")
+            //print("😎 JSON returned! Daily Readings:: \(returned.daily.time)")
             Task { @MainActor in
                 self.temperature = Int(returned.current.temperature_2m)
                 self.feelsLike = Int(returned.current.apparent_temperature)
