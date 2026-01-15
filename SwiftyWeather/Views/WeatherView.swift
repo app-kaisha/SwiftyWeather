@@ -13,6 +13,7 @@ import SwiftUI
 struct WeatherView: View {
     
     @State private var weatherVM = WeatherViewModel()
+    @State private var isSettingsPresented = false
     
     var body: some View {
         NavigationStack {
@@ -63,14 +64,16 @@ struct WeatherView: View {
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
-                            
+                            isSettingsPresented.toggle()
                         } label: {
                             Image(systemName: "gear")
-                                
                         }
                         .tint(.white)
                     }
                 }
+            }
+            .fullScreenCover(isPresented: $isSettingsPresented) {
+                PreferenceView()
             }
         }
         .task {

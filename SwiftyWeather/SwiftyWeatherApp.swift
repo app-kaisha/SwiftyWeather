@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct SwiftyWeatherApp: App {
@@ -15,9 +16,14 @@ struct SwiftyWeatherApp: App {
             WeatherView()
                 .modelContainer(for: Preference.self)
                 .onAppear {
-                    Thread.sleep(forTimeInterval: 3)
+                    Thread.sleep(forTimeInterval: 2)
                 }
         }
         
+    }
+    
+    init()
+    {
+        print(URL.applicationSupportDirectory.path(percentEncoded: false))
     }
 }

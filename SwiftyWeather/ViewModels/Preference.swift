@@ -30,7 +30,7 @@ class Preference {
     static var preview: ModelContainer {
         let container = try! ModelContainer(for: Preference.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
         
-        container.mainContext.insert(Preference(locationName: "Dublin", latString: "53.33880", longString: "=6.2551", selectedUnit: .metric, degreeUnitShowing: true))
+        container.mainContext.insert(Preference(locationName: "Dublin", latString: "53.33880", longString: "6.2551", selectedUnit: .metric, degreeUnitShowing: true))
         
         return container
     }

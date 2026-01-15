@@ -14,6 +14,8 @@ struct PreferenceView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
+    @Query var preferences: [Preference]
+    
     @State private var locationNameIs = ""
     @State private var latString = ""
     @State private var longString = ""
@@ -87,12 +89,41 @@ struct PreferenceView: View {
                 
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
+                        // only save one so delete all existing
+                        if !preferences.isEmpty {
+                            preferences.forEach { modelContext.delete($0)}
+                        }
+                        let preference = Preference(
+                            locationName: locationNameIs,
+                            latString: latString,
+                            longString: longString,
+                            selectedUnit: selectedUnit,
+                            degreeUnitShowing: degreeUnitShowing
+                        )
+                        
+                        modelContext.insert(preference)
+                        
+                        guard let _ = try? modelContext.save() else {
+                            print("😡 ERROR: Save on PreferenceView did not work!")
+                            return
+                        }
                         
                         dismiss()
                     }
                 }
             }
             .padding()
+        }
+        .task {
+            guard !preferences.isEmpty else { return }
+            
+            let preference = preferences.first!
+            locationNameIs = preference.locationName
+            latString = preference.latString
+            longString = preference.longString
+            selectedUnit = preference.selectedUnit
+            degreeUnitShowing = preference.degreeUnitShowing
+            
         }
         
     }
