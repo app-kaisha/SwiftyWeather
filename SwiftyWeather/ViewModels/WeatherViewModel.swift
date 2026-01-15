@@ -12,9 +12,11 @@ import Foundation
 @Observable
 class WeatherViewModel {
     
-    var urlString = "https://api.open-meteo.com/v1/forecast?latitude=52.05466078996747&longitude=-0.691645319980933&daily=weather_code,sunrise,sunset,temperature_2m_max,temperature_2m_min&current=precipitation,temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=Europe%2FLondon&wind_speed_unit=mph"
+    var urlString = "https://api.open-meteo.com/v1/forecast?latitude=52.05466078996747&longitude=-0.691645319980933&daily=weather_code,sunrise,sunset,temperature_2m_max,temperature_2m_min&current=precipitation,temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=Europe%2FLondon&wind_speed_unit=kmh&temperature_unit=celsius"
     
 //    var urlString = "https://api.open-meteo.com/v1/forecast?latitude=52.05466078996747&longitude=-0.691645319980933&current=precipitation,temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=Europe%2FLondon&wind_speed_unit=mph"
+    
+    //"https://api.open-meteo.com/v1/forecast?latitude=52.05466078996747&longitude=-0.691645319980933&daily=weather_code,sunrise,sunset,temperature_2m_max,temperature_2m_min&current=precipitation,temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=Europe%2FLondon&wind_speed_unit=mph"
     
     var temperature: Int = 0
     var feelsLike: Int = 0
@@ -74,6 +76,23 @@ class WeatherViewModel {
             isLoading = false
             print("😡 ERROR: Could not get data from \(urlString) \(error.localizedDescription)")
         }
+    }
+    
+    func updateAPIString(lat: String, lon: String, units: UnitSystem) {
+        
+        var speed = ""
+        var temp = ""
+        
+        switch units {
+        case .imperial:
+            speed = "mph"
+            temp = "fahrenheit"
+        case .metric:
+            speed = "kmh"
+            temp = "celsius"
+        }
+        
+        urlString = "https://api.open-meteo.com/v1/forecast?latitude=\(lat)&longitude=\(lon)&daily=weather_code,sunrise,sunset,temperature_2m_max,temperature_2m_min&current=precipitation,temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m,apparent_temperature&timezone=Europe%2FLondon&wind_speed_unit=\(speed)&temperature_unit=\(temp)"
     }
     
     

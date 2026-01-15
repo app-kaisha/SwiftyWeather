@@ -9,11 +9,29 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct WeatherView: View {
     
+    @Environment(\.modelContext) private var modelContext
+    @Query var preferences: [Preference]
+    
     @State private var weatherVM = WeatherViewModel()
     @State private var isSettingsPresented = false
+    @State private var preference = Preference()
+    
+    private var temp: String {
+        if preference.degreeUnitShowing {
+            switch preference.selectedUnit {
+            case .imperial:
+                return "F"
+            case .metric:
+                return "C"
+            }
+        } else {
+            return ""
+        }
+    }
     
     var body: some View {
         NavigationStack {
@@ -28,9 +46,9 @@ struct WeatherView: View {
                         .padding(.horizontal)
                     Text(getWeatherDescription(for: weatherVM.weatherCode))
                         .font(.largeTitle)
-                    Text("\(weatherVM.temperature)°C")
+                    Text("\(weatherVM.temperature)°\(temp)")
                         .font(.system(size: 150, weight: .thin))
-                    Text("Wind \(weatherVM.windSpeed)mph - Feels Like \(weatherVM.feelsLike)°C")
+                    Text("Wind \(weatherVM.windSpeed)\(preference.selectedUnit == .imperial ? "mph" : "kmh") - Feels Like \(weatherVM.feelsLike)°\(temp)")
                         .font(.title2)
                         .padding(.bottom)
                     
@@ -46,8 +64,8 @@ struct WeatherView: View {
                                 Text(getWeekDayFromDateString(dateString: weatherVM.date[index]))
                                 
                                 Spacer()
-                                Text("\(Int(weatherVM.dailyLowTemp[index]))°C /")
-                                Text("\(Int(weatherVM.dailyHighTemp[index]))°C")
+                                Text("\(Int(weatherVM.dailyLowTemp[index]))°\(temp) /")
+                                Text("\(Int(weatherVM.dailyHighTemp[index]))°\(temp)")
                                     .font(.title).bold()
                                 
                             }
@@ -72,16 +90,32 @@ struct WeatherView: View {
                     }
                 }
             }
-            .fullScreenCover(isPresented: $isSettingsPresented) {
-                PreferenceView()
+            
+        }
+        .onChange(of: preferences) {
+            Task {
+                await callWeatherAPI()
             }
+            
         }
         .task {
-            await weatherVM.getData()
+            await callWeatherAPI()
         }
+        .fullScreenCover(isPresented: $isSettingsPresented) {
+            PreferenceView()
+        }
+    }
+    
+    private func callWeatherAPI() async {
+        if !preferences.isEmpty {
+            preference = preferences.first!
+            weatherVM.updateAPIString(lat: preference.latString, lon: preference.longString, units: preference.selectedUnit)
+        }
+        await weatherVM.getData()
     }
 }
 
 #Preview {
     WeatherView()
+        
 }
